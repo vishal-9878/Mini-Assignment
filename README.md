@@ -32,12 +32,15 @@ Once the EFS is attached to the EC2 instances, you can test file visibility. SSH
 
 Edit the upload_to_s3.sh shell script and replace <your_bucket_name> with the name of your S3 bucket.
 Run the upload_to_s3.sh script to upload the file to the S3 bucket:
-# ./upload_to_s3.sh
+./upload_to_s3.sh
 Finally, to set up a cronjob on all EC2 instances for synchronizing data with the S3 bucket, follow these steps:
 
 SSH into each EC2 instance.
 Edit the crontab file using the "crontab -e" command.
+
 Add the following entry to the crontab file:
-* * * * * aws s3 sync efs/ s3://testing.bucket.cloud --include "*"
+<* * * * * aws s3 sync efs/ s3://testing.bucket.cloud --include "*">
+
 Save the crontab file.
+
 Now, the cronjob will run every minute on all EC2 instances, synchronizing data with the S3 bucket.
