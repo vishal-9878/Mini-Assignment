@@ -24,9 +24,9 @@ Go into AWS CloudFormation and run the run the code and it will create EC2 insta
 Once the EC2 instances are created, manually attach the EFS to each instance. To do this:
 
 * Go to the AWS Management Console.
-* Navigate to the EC2 service and select "Instances".
-* Select each EC2 instance created in the previous step and choose "Actions" > "Attach File System".
-* Select the EFS file system from the dropdown and specify a mount path (e.g., /efs).
+* Navigate to the EFS service and select "EFS(Elastic File System)".
+* Select the EFS which you created and click on "Attach" 
+* It will show you a command go to the EC2 instances and run the command --> exmaple:- sudo mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport fs-0fd4ae42b67d43e1a.efs.us-east-1.amazonaws.com:/ efs
 
 Once the EFS is attached to the EC2 instances, you can test file visibility. SSH into one of the EC2 instances and create a file inside the mount path (/efs). Verify that the file is visible on all EC2 instances.
 
@@ -36,7 +36,8 @@ Run the upload_to_s3.sh script to upload the file to the S3 bucket:
 Finally, to set up a cronjob on all EC2 instances for synchronizing data with the S3 bucket, follow these steps:
 
 SSH into each EC2 instance.
-Edit the crontab file using the crontab -e command.
+Edit the crontab file using the "crontab -e" command.
 Add the following entry to the crontab file:
-
+* * * * * aws s3 sync efs/ s3://testing.bucket.cloud --include "*"
 Save the crontab file.
+Now, the cronjob will run every minute on all EC2 instances, synchronizing data with the S3 bucket.
